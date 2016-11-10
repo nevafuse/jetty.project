@@ -72,6 +72,7 @@ public class HttpURI
     private String _param;
     private String _query;
     private String _fragment;
+    private String defaultEncoding = System.getProperty("org.eclipse.jetty.util.UrlEncoding.charset","UTF-8");
     
     String _uri;
     String _decodedPath;
@@ -610,7 +611,7 @@ public class HttpURI
     {
         if (_query==_fragment)
             return;
-        UrlEncoded.decodeUtf8To(_query,parameters);
+        UrlEncoded.decodeTo(_query,parameters,defaultEncoding);
     }
 
     /* ------------------------------------------------------------ */
@@ -625,8 +626,8 @@ public class HttpURI
         if (_query==_fragment)
             return;
 
-        if (encoding==null || StandardCharsets.UTF_8.equals(encoding))
-            UrlEncoded.decodeUtf8To(_query,parameters);
+        if (encoding==null)
++            UrlEncoded.decodeTo(_query,parameters,defaultEncoding);
         else
             UrlEncoded.decodeTo(_query,parameters,encoding);
     }
